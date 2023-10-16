@@ -1,0 +1,189 @@
+---
+title: Estadística
+subtitle: "Actividad 1 - Iniciando con R"
+author: "Jorge Toto Hernandez"
+date: "6 de Septiembre de 2023"
+output: 
+    prettydoc::html_pretty:
+      theme: leonids
+      highlight: vignette
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Descripción
+
+La siguiente tarea tiene como objetivo reforzar los conceptos de programación en lenguaje `R` que se discutieron en las sesiones pasadas. 
+
+### Vectores atómicos
+
+En `R`, los vectores atómicos se pueden generar mediante diversos comandos, e.g., `x <- c("a","char","nuevo")` representa un vector de carácteres. Basado en lo anterior cree vectores con las siguientes características:
+
++ Un vector que represente $\{2^i\}_{i=1}^{20}$
+```{r vector1}
+i <- 1:20
+2^i
+```
+
++ Un vector que represente $\{2n+1\}_{n=4}^{13}$
+```{r vector2}
+n <- 4:13
+2*n+1
+```
+
++ Un vector que represente $\{2n+1\}_{n=4}^{13} \cap \{2^i\}_{i=1}^{20}$
+```{r vector3}
+n1 <- 4:13
+v1 <- 2^i
+i <- 1:20
+v2 <- 2^i
+vector_interseccion <- intersect(v1, v2)
+vector_interseccion
+```
+
++ Un vector que represente $\{\sin(2*\pi t)\}_{t=1}^5$
+```{r vector4}
+t <- 1:5
+sin(2 * pi * t)
+```
+
++ Un vector de $10$ números aleatorios con distribución uniforme (apóyese del comando `runif()`).
+```{r vector5}
+vector_aleatorio <- runif(10)
+vector_aleatorio
+```
+
++ Un vector con las primeras 15 letras del abecedario en mayúsculas.
+```{r vector6}
+letras <- LETTERS[1:15]
+letras
+```
+
+Supóngamos ahora que se intentan generar los siguientes vectores atómicos:
+
+
+```{r, echo=T}
+x1 <- c("1","2",2+3i,5+41)
+x2 <- log(c(T,T,T,T,F))
+x3 <- !(c(1,3,4,12,12.1,99,100))
+x4 <- c(1,2,3)<"a"
+x5 <- 1:10
+```
+
+?De qué tipo es cada una de ellas? Liste el tipo de cada una de ellas.
+
+<span style= "color:green; font-weight:bold">1. x1 <- c("1","2",2+3i,5+41) :</span>
+
+En este caso, R creará un vector de tipo character porque al menos uno de los elementos es un carácter (las comillas alrededor de "1" y "2"). Los números complejos (como 2+3i y 5+41) se convertirán automáticamente en caracteres. El vector x1 contendrá elementos de tipo character.
+
+<span style= "color:green; font-weight:bold">2. x2 <- log(c(T,T,T,T,F)) :</span>
+
+R intentará calcular el logaritmo natural de cada elemento del vector. Dado que log es una función matemática que no está definida para valores booleanos (T/F), obtendrás un mensaje de advertencia y valores NA (Not Available) en el resultado. x2 será un vector con valores NA.
+
+<span style= "color:green; font-weight:bold">3. x3 <- !(c(1,3,4,12,12.1,99,100)) :</span>
+
+En este caso, R intentará negar cada elemento del vector. El resultado será un vector lógico (logical) en el que cada elemento representará si el elemento correspondiente en el vector original es falso (FALSE) o verdadero (TRUE) después de aplicar la negación. El vector x3 contendrá elementos lógicos.
+
+<span style= "color:green; font-weight:bold">4. x4 <- c(1,2,3)<"a" :</span>
+
+R intentará realizar una comparación elemento por elemento entre el vector numérico c(1,2,3) y el carácter "a". Esto generará un vector lógico que indicará si cada elemento del vector es menor que "a". Sin embargo, dado que "a" es un carácter y no se puede comparar directamente con números, R generará valores NA para los elementos del vector x4. x4 será un vector con valores NA.
+
+<span style= "color:green; font-weight:bold">5. x5 <- 1:10 :</span>
+
+En este caso, se crea un vector numérico que contiene los números enteros del 1 al 10. x5 será un vector numérico.
+
+### Matrices
+
+En el siguiente ejercicio se crearán las siguientes matrices:
+ 
++ Una matriz de $2\times3$ con carácteres (de cualquier tipo).
+
+```{r matrices1}
+matriz_caracteres <- matrix(c("a", "b", "c", "d", "e", "f"), nrow = 2, ncol = 3, byrow = TRUE)
+print(matriz_caracteres)
+```
+
++ Una matriz de $4\times4$ cuyos elementos son sólo la letra `"a"`.
+```{r matrices2}
+matriz_a <- matrix(rep("a", 16), nrow = 4, ncol = 4)
+print(matriz_a)
+```
+
++ Una matriz de $5\times5$ cuyos elementos son las letras minúsculas.
+```{r matrices3}
+alfabeto_minusc = letters[1:25]
+matriz_minusc <- matrix(alfabeto_minusc, nrow = 5, ncol = 5)
+print(matriz_minusc)
+```
+
++ Una matriz de $2\times2$ cuyos elementos son valores complejos.
+```{r matrices4}
+matriz_complej <- matrix(c(2 + 3i, -1 + 4i, 0 - 2i, 5 - 6i), nrow = 2, ncol = 2)
+print(matriz_complej)
+```
+
+Una matriz se puede generar igual mediante otros dos comandos ?Cuáles son?
+Aparte de el comando matrix() se pueden usar:
+
+1. array(): Aunque el comando array() se utiliza principalmente para crear matrices multidimensionales (arreglos), también se puede usar para crear matrices bidimensionales (matrices) especificando el número de filas y columnas.
+2. cbind(): Se usa para combinar vectores en columnas, y si combinas varios vectores de la misma longitud, obtendrás una matriz.
+
+### Listas 
+
+Una lista es una generalización tanto de un vector atómico como de un `data.frame`. Los elementos de un vector atómico pueden ser de cualquier tipo. Supongamos que tenemos un lista dada por
+
+```{r, eval=FALSE}
+x <- list(1,"a",2+3i,T,F,1L)
+```
+
+- ?Qué sucede si a la lista `x` le aplico `dim(x) <- c(2,3)`?
+Si intentas aplicar la función dim(x) <- c(2,3) a la lista x en R, obtendrás un error porque la función dim() se utiliza comúnmente para definir las dimensiones de matrices o arreglos, pero no es aplicable a listas. Las listas en R no tienen dimensiones en el sentido que tienen las matrices o los arreglos multidimensionales.
+
+- ?Cómo podrá llamar a ese nuevo objeto?
+Ahora, con respecto a cómo llamar a ese nuevo objeto (x_matrix), simplemente puedes usar ese nombre para acceder a la matriz y realizar operaciones en ella, como se mencionó en la respuesta anterior.
+
+- ?Qué sucede si `c(list("a"), 2+3i)`? ?De qué tipo es el resultado?
+Si ejecutas c(list("a"), 2+3i), obtendrás una nueva lista que contiene dos elementos:
+
+1.El primer elemento es la lista original list("a").
+2.El segundo elemento es el número complejo 2+3i
+ 
+ 
+### Gráficos
+
+El comando `plot` me permite graficar dos vectores de igual longtitud. El comando `par(mfrow=c(2,2))` divide el espacio de graficación en dos filas y dos columnas con lo cual yo graficar 4 gráficos sobre la misma figura. 
+Por otro lado el comando `write(path)` permite escribir un archivo en la dirección dada por `path`, por ejemplo:
+
+```{r eval=FALSE}
+x <-rnorm(20)   # Variables aleatorias con media 0 y sd 1
+write(x,"archivo.txt", "\n")
+```
+Crea un archivo llamado `archivo.txt` en el directorio de trabajo. De igual forma `R` permite graficar en otro **dispositivo**. Por ejemplo, podemos graficar en un dispositivo PDF y después guardar el archivo en el directorio de trabajo mediante el siguiente comando:
+
+```{r eval=FALSE}
+pdf("julio.pdf")            # Creamos el PDF
+plot(rnorm(30),type = "l")  # Graficamos en el dispositivo
+dev.off()                   # Finalmente cerramos el PDF
+
+```
+
+Con base en lo anterior se requiere que el estudiante genere 40 archivos llamados con valores aleatorios del tipo uniforme (creados mediante `runif()`) y cree los archivos `txt` y `pdf` que contienen sus valores y sus gráficos. 
+
+```{r}
+for(i in 1:40){
+  x <- runif(1000)
+  write(x, paste("Archivo", i, ".txt", sep = ""), sep = "\n")
+  pdf(paste("archivo", i, ".pdf", sep = ""))
+  plot(x, type = "l", main = "Numeros Aleatorios", col = "gray40", ylim = c(0, 2))
+  dev.off()
+}
+```
+
+El trabajo se tiene que entregar el miércoles 13 de Septiembre.
+
+## Referencias adicionales
+
+- Puede consultar cualquier libro de R.
+- Se puede consultar las presentaciones previas.
