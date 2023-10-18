@@ -1,2 +1,2 @@
 # Practica1
-prueba
+Primer Practica en R Studio
